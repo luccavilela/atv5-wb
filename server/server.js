@@ -433,6 +433,60 @@ app.delete('/excluirServico/:id', (req, res) => {
   });
 });
 
+app.post('/realizarVendaProduto', (req, res) => {
+  const { nomeProduto, valorProduto, quantidadeCompra, cpfCliente } = req.body;
+
+
+  const getDadosClienteSql = 'SELECT genero, nome FROM cliente WHERE cpf = ?';
+  connection.query(getDadosClienteSql, [cpfCliente], (error, dadosClienteResult) => {
+    if (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Erro ao obter dados do cliente' });
+    } else {
+      const generoCliente = dadosClienteResult[0].genero;
+      const nomeCliente = dadosClienteResult[0].nome;
+
+      
+      const valorTotal = valorProduto * quantidadeCompra;
+
+      
+      const updateProdutoSql = `UPDATE produto SET quantidade_vendas = quantidade_vendas + ?,
+        quantidade_vendas_${generoCliente} = quantidade_vendas_${generoCliente} + ? WHERE nome = ?`;
+      connection.query(updateProdutoSql, [quantidadeCompra, quantidadeCompra, nomeProduto], (error, produtoResult) => {
+        if (error) {
+          console.error(error);
+          res.status(500).json({ error: 'Erro ao realizar venda' });
+        } else {
+         
+          const updateClienteSql = 'UPDATE cliente SET quantidade_consumo = quantidade_consumo + ?, valor_gasto = valor_gasto + ? WHERE cpf = ?';
+          connection.query(updateClienteSql, [quantidadeCompra, valorTotal, cpfCliente], (error, clienteResult) => {
+            if (error) {
+              console.error(error);
+              res.status(500).json({ error: 'Erro ao realizar venda' });
+            } else {
+              
+              const insertHistoricoSql = 'INSERT INTO historico_vendas (nome_cliente, cpf_cliente, nome_servico_ou_produto, quantidade_venda, valor_venda) VALUES (?, ?, ?, ?, ?)';
+              connection.query(insertHistoricoSql, [nomeCliente, cpfCliente, nomeProduto, quantidadeCompra, valorTotal], (error, historicoResult) => {
+                if (error) {
+                  console.error(error);
+                  res.status(500).json({ error: 'Erro ao registrar venda no histórico' });
+                } else {
+                  res.json({ success: true, message: 'Venda realizada com sucesso' });
+                }
+              });
+            }
+          });
+        }
+      });
+    }
+  });
+});
+
+
+
+
+
+
 app.listen(port, () => {
   console.log(`Servidor rodando na porta ${port}`);
 });
