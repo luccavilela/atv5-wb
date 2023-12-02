@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import 'materialize-css/dist/css/materialize.min.css';
 
 interface Cliente {
+    id: number;
     nome: string;
     cpf: string;
     email: string;
@@ -14,23 +15,41 @@ interface ListaClienteProps {
 export default function ListaCliente(props: ListaClienteProps) {
     const [clientes, setClientes] = useState<Cliente[]>([]);
 
-    useEffect(() => {
-        const fetchClientes = async () => {
-            try {
-                const response = await fetch('http://localhost:3001/listarClientes');
-                if (response.ok) {
-                    const data = await response.json();
-                    setClientes(data.clientes);
-                } else {
-                    console.error('Erro ao obter a lista de clientes');
-                }
-            } catch (error) {
-                console.error('Erro na requisição:', error);
+    const fetchClientes = async () => {
+        try {
+            const response = await fetch('http://localhost:3001/listarClientes');
+            if (response.ok) {
+                const data = await response.json();
+                setClientes(data.clientes);
+            } else {
+                console.error('Erro ao obter a lista de clientes');
             }
-        };
+        } catch (error) {
+            console.error('Erro na requisição:', error);
+        }
+    };
 
+    useEffect(() => {
         fetchClientes();
     }, []);
+
+    const handleExcluir = async (id: number) => {
+        try {
+            const response = await fetch(`http://localhost:3001/excluirCliente/${id}`, {
+                method: 'DELETE',
+            });
+
+            if (response.ok) {
+                console.log('Cliente excluído com sucesso');
+                fetchClientes();
+            } else {
+                console.error('Erro ao excluir cliente');
+            }
+        } catch (error) {
+            console.error('Erro na requisição:', error);
+        }
+    };
+    
 
     return (
         <div className="collection">
@@ -40,6 +59,41 @@ export default function ListaCliente(props: ListaClienteProps) {
                 onClick={(e) => props.seletorView("Cadastrar Cliente", e)}
             >
                 Cadastrar um cliente
+            </button>
+
+            <button
+                className="waves-effect waves-light btn cadastrar-botao botao-customizado"
+                onClick={(e) => props.seletorView("Listar 10 clientes que mais consumiram", e)}
+            >
+                Listar 10 clientes que mais consumiram
+            </button>
+
+            <button
+                className="waves-effect waves-light btn cadastrar-botao botao-customizado"
+                onClick={(e) => props.seletorView("Listar 10 clientes que menos consumiram", e)}
+            >
+                Listar 10 clientes que menos consumiram
+            </button>
+
+            <button
+                className="waves-effect waves-light btn cadastrar-botao botao-customizado"
+                onClick={(e) => props.seletorView("Listar 5 clientes que mais gastaram", e)}
+            >
+                Listar 5 clientes que mais gastaram
+            </button>
+
+            <button
+                className="waves-effect waves-light btn cadastrar-botao botao-customizado"
+                onClick={(e) => props.seletorView("Listar clientes masculinos", e)}
+            >
+                Listar clientes masculinos
+            </button>
+            
+            <button
+                className="waves-effect waves-light btn cadastrar-botao botao-customizado"
+                onClick={(e) => props.seletorView("Listar clientes femininas", e)}
+            >
+                Listar clientes femininas
             </button>
 
             {clientes.map((cliente, index) => (
@@ -56,7 +110,7 @@ export default function ListaCliente(props: ListaClienteProps) {
                         >
                             Editar
                         </button>
-                        <button className="excluir">Excluir</button>
+                        <button className="excluir" onClick={() => handleExcluir(cliente.id)}>Excluir</button>
                     </div>
                 </div>
             ))}

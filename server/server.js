@@ -46,7 +46,7 @@ app.post('/cadastrarCliente', (req, res) => {
 });
 
 app.get('/listarClientes', (req, res) => {
-  const sql = 'SELECT nome, cpf, email FROM cliente';
+  const sql = 'SELECT id, nome, cpf, email FROM cliente';
 
   connection.query(sql, (error, results) => {
     if (error) {
@@ -54,6 +54,7 @@ app.get('/listarClientes', (req, res) => {
       res.status(500).json({ error: 'Erro ao obter a lista de clientes' });
     } else {
       const clientes = results.map((cliente) => ({
+        id: cliente.id,
         nome: cliente.nome,
         cpf: cliente.cpf,
         email: cliente.email,
@@ -62,6 +63,63 @@ app.get('/listarClientes', (req, res) => {
     }
   });
 });
+
+app.delete('/excluirCliente/:id', (req, res) => {
+  const id = req.params.id;
+  console.log(id)
+  connection.query('DELETE FROM cliente WHERE id = ?', [id], (err, result) => {
+    if (err) {
+      console.error('Erro ao excluir cliente:', err);
+      res.status(500).json({ error: 'Erro interno ao excluir cliente' });
+    } else {
+      if (result.affectedRows > 0) {
+        res.json({ message: 'Cliente excluído com sucesso' });
+      } else {
+        res.status(404).json({ error: 'Cliente não encontrado' });
+      }
+    }
+  });
+});
+
+app.get('/listarClientesMasculinos', (req, res) => {
+  const sql = 'SELECT id, nome, cpf, email FROM cliente WHERE genero = "masculino"';
+
+  connection.query(sql, (error, results) => {
+    if (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Erro ao obter a lista de clientes masculinos' });
+    } else {
+      const clientes = results.map((cliente) => ({
+        id: cliente.id,
+        nome: cliente.nome,
+        cpf: cliente.cpf,
+        email: cliente.email,
+      }));
+      res.json({ clientes });
+    }
+  });
+});
+
+app.get('/listarClientesFemininas', (req, res) => {
+  const sql = 'SELECT id, nome, cpf, email FROM cliente WHERE genero = "feminino"';
+
+  connection.query(sql, (error, results) => {
+    if (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Erro ao obter a lista de clientes femininas' });
+    } else {
+      const clientes = results.map((cliente) => ({
+        id: cliente.id,
+        nome: cliente.nome,
+        cpf: cliente.cpf,
+        email: cliente.email,
+      }));
+      res.json({ clientes });
+    }
+  });
+});
+
+
 
 app.post('/cadastrarProduto', (req, res) => {
   const {
@@ -83,7 +141,7 @@ app.post('/cadastrarProduto', (req, res) => {
 });
 
 app.get('/listarProdutos', (req, res) => {
-  const sql = 'SELECT nome, valor, quantidade_vendas FROM produto';
+  const sql = 'SELECT id, nome, valor, quantidade_vendas FROM produto';
 
   connection.query(sql, (error, results) => {
     if (error) {
@@ -91,11 +149,30 @@ app.get('/listarProdutos', (req, res) => {
       res.status(500).json({ error: 'Erro ao obter a lista de produtos' });
     } else {
       const produtos = results.map((produto) => ({
+        id: produto.id,
         nome: produto.nome,
         valor: produto.valor,
         quantidade_vendas: produto.quantidade_vendas,
       }));
       res.json({ produtos });
+    }
+  });
+});
+
+
+app.delete('/excluirProduto/:id', (req, res) => {
+  const id = req.params.id;
+  console.log(id)
+  connection.query('DELETE FROM produto WHERE id = ?', [id], (err, result) => {
+    if (err) {
+      console.error('Erro ao excluir produto:', err);
+      res.status(500).json({ error: 'Erro interno ao excluir produto' });
+    } else {
+      if (result.affectedRows > 0) {
+        res.json({ message: 'Produto excluído com sucesso' });
+      } else {
+        res.status(404).json({ error: 'Produto não encontrado' });
+      }
     }
   });
 });
@@ -120,7 +197,7 @@ app.post('/cadastrarServico', (req, res) => {
 });
 
 app.get('/listarServicos', (req, res) => {
-  const sql = 'SELECT nome, valor, quantidade_vendas FROM servico';
+  const sql = 'SELECT id, nome, valor, quantidade_vendas FROM servico';
 
   connection.query(sql, (error, results) => {
     if (error) {
@@ -128,11 +205,29 @@ app.get('/listarServicos', (req, res) => {
       res.status(500).json({ error: 'Erro ao obter a lista de serviços' });
     } else {
       const servicos = results.map((servico) => ({
+        id: servico.id,
         nome: servico.nome,
         valor: servico.valor,
         quantidade_vendas: servico.quantidade_vendas,
       }));
       res.json({ servicos });
+    }
+  });
+});
+
+app.delete('/excluirServico/:id', (req, res) => {
+  const id = req.params.id;
+  console.log(id)
+  connection.query('DELETE FROM servico WHERE id = ?', [id], (err, result) => {
+    if (err) {
+      console.error('Erro ao excluir serviço:', err);
+      res.status(500).json({ error: 'Erro interno ao excluir serviço' });
+    } else {
+      if (result.affectedRows > 0) {
+        res.json({ message: 'Serviço excluído com sucesso' });
+      } else {
+        res.status(404).json({ error: 'Serviço não encontrado' });
+      }
     }
   });
 });

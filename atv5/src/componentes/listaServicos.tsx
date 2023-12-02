@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import 'materialize-css/dist/css/materialize.min.css';
 
 interface Servico {
+    id: number;
     nome: string;
     valor: number;
     quantidade_vendas: number;
@@ -14,23 +15,40 @@ interface ListaServicosProps {
 export default function ListaServicos(props: ListaServicosProps) {
     const [servicos, setServicos] = useState<Servico[]>([]);
 
-    useEffect(() => {
-        const fetchServicos = async () => {
-            try {
-                const response = await fetch('http://localhost:3001/listarServicos');
-                if (response.ok) {
-                    const data = await response.json();
-                    setServicos(data.servicos);
-                } else {
-                    console.error('Erro ao obter a lista de serviços');
-                }
-            } catch (error) {
-                console.error('Erro na requisição:', error);
+    const fetchServicos = async () => {
+        try {
+            const response = await fetch('http://localhost:3001/listarServicos');
+            if (response.ok) {
+                const data = await response.json();
+                setServicos(data.servicos);
+            } else {
+                console.error('Erro ao obter a lista de serviços');
             }
-        };
+        } catch (error) {
+            console.error('Erro na requisição:', error);
+        }
+    };
 
+    useEffect(() => {
         fetchServicos();
     }, []);
+
+    const handleExcluir = async (id: number) => {
+        try {
+            const response = await fetch(`http://localhost:3001/excluirServico/${id}`, {
+                method: 'DELETE',
+            });
+
+            if (response.ok) {
+                console.log('Serviço excluído com sucesso');
+                fetchServicos();
+            } else {
+                console.error('Erro ao excluir serviço');
+            }
+        } catch (error) {
+            console.error('Erro na requisição:', error);
+        }
+    };
 
     return (
         <div className="collection">
@@ -40,6 +58,27 @@ export default function ListaServicos(props: ListaServicosProps) {
                 onClick={(e) => props.seletorView("Cadastrar Serviço", e)}
             >
                 Cadastrar um serviço
+            </button>
+
+            <button
+                className="waves-effect waves-light btn cadastrar-botao botao-customizado"
+                onClick={(e) => props.seletorView("Listar serviços mais consumidos", e)}
+            >
+                Listar os Serviços mais consumidos
+            </button>
+            
+            <button
+                className="waves-effect waves-light btn cadastrar-botao botao-customizado"
+                onClick={(e) => props.seletorView("Listar serviços mais consumidos por homens", e)}
+            >
+                Listar os Serviços mais consumidos por homens
+            </button>
+
+            <button
+                className="waves-effect waves-light btn cadastrar-botao botao-customizado"
+                onClick={(e) => props.seletorView("Listar serviços mais consumidos por mulheres", e)}
+            >
+                Listar os Serviços mais consumidos por mulheres
             </button>
 
             {servicos.map((servico, index) => (
@@ -54,7 +93,7 @@ export default function ListaServicos(props: ListaServicosProps) {
                         >
                             Editar
                         </button>
-                        <button className="excluir">Excluir</button>
+                        <button className="excluir" onClick={() => handleExcluir(servico.id)}>Excluir</button>
                     </div>
                 </div>
             ))}
