@@ -531,6 +531,29 @@ app.post('/realizarVendaServico', (req, res) => {
   });
 });
 
+app.get('/listarVendas', (req, res) => {
+  const sql = 'SELECT id, nome_cliente, cpf_cliente, nome_servico_ou_produto, quantidade_venda, valor_venda, data_venda FROM historico_vendas';
+
+  connection.query(sql, (error, results) => {
+    if (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Erro ao obter a lista de vendas' });
+    } else {
+      const vendas = results.map((venda) => ({
+        id: venda.id,
+        nome_cliente: venda.nome_cliente,
+        cpf_cliente: venda.cpf_cliente,
+        nome_servico_ou_produto: venda.nome_servico_ou_produto,
+        quantidade_venda: venda.quantidade_venda,
+        valor_venda: venda.valor_venda,
+        data_venda: venda.data_venda,
+      }));
+      res.json({ vendas });
+    }
+  });
+});
+
+
 
 
 
