@@ -6,6 +6,8 @@ interface Servico {
     nome: string;
     valor: number;
     quantidade_vendas: number;
+    quantidade_vendas_masculino: number;
+    quantidade_vendas_feminino: number;
 }
 
 interface ListaServicosProps {
@@ -66,7 +68,7 @@ export default function ListaServicos(props: ListaServicosProps) {
             >
                 Listar os Serviços mais consumidos
             </button>
-            
+
             <button
                 className="waves-effect waves-light btn cadastrar-botao botao-customizado"
                 onClick={(e) => props.seletorView("Listar serviços mais consumidos por homens", e)}
@@ -85,7 +87,9 @@ export default function ListaServicos(props: ListaServicosProps) {
                 <div key={index} className="collection-item">
                     Nome: {servico.nome} <br />
                     Valor: R$ {servico.valor} <br />
-                    Quantidade vendida: {servico.quantidade_vendas} 
+                    Quantidade vendida: {servico.quantidade_vendas} <br />
+                    Quantidade comprada por homens: {servico.quantidade_vendas_masculino} <br />
+                    Quantidade comprada por mulheres: {servico.quantidade_vendas_feminino}
                     <div className="botoes">
                         <button
                             className="waves-effect waves-light editar"

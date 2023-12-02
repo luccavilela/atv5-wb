@@ -6,6 +6,8 @@ interface Cliente {
     nome: string;
     cpf: string;
     email: string;
+    quantidade_consumo: number;
+    valor_gasto: number;
 }
 
 interface ListaClienteProps {
@@ -101,8 +103,8 @@ export default function ListaCliente(props: ListaClienteProps) {
                     Nome: {cliente.nome} <br />
                     CPF: {cliente.cpf} <br />
                     Email: {cliente.email} <br />
-                    Produtos Consumidos: <br />
-                    Serviços Consumidos:
+                    Quantidade de Serviços e Produtos comprados: {cliente.quantidade_consumo} <br />
+                    Valor gasto: R$ {cliente.valor_gasto} 
                     <div className="botoes">
                         <button
                             className="waves-effect waves-light editar"

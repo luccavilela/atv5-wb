@@ -46,7 +46,7 @@ app.post('/cadastrarCliente', (req, res) => {
 });
 
 app.get('/listarClientes', (req, res) => {
-  const sql = 'SELECT id, nome, cpf, email FROM cliente';
+  const sql = 'SELECT id, nome, cpf, email, quantidade_consumo, valor_gasto FROM cliente';
 
   connection.query(sql, (error, results) => {
     if (error) {
@@ -58,6 +58,8 @@ app.get('/listarClientes', (req, res) => {
         nome: cliente.nome,
         cpf: cliente.cpf,
         email: cliente.email,
+        quantidade_consumo: cliente.quantidade_consumo,
+        valor_gasto: cliente.valor_gasto,
       }));
       res.json({ clientes });
     }
@@ -82,7 +84,7 @@ app.delete('/excluirCliente/:id', (req, res) => {
 });
 
 app.get('/listarClientesMasculinos', (req, res) => {
-  const sql = 'SELECT id, nome, cpf, email FROM cliente WHERE genero = "masculino"';
+  const sql = 'SELECT id, nome, cpf, email, quantidade_consumo, valor_gasto FROM cliente WHERE genero = "masculino"';
 
   connection.query(sql, (error, results) => {
     if (error) {
@@ -94,6 +96,8 @@ app.get('/listarClientesMasculinos', (req, res) => {
         nome: cliente.nome,
         cpf: cliente.cpf,
         email: cliente.email,
+        quantidade_consumo: cliente.quantidade_consumo,
+        valor_gasto: cliente.valor_gasto,
       }));
       res.json({ clientes });
     }
@@ -101,7 +105,7 @@ app.get('/listarClientesMasculinos', (req, res) => {
 });
 
 app.get('/listarClientesFemininas', (req, res) => {
-  const sql = 'SELECT id, nome, cpf, email FROM cliente WHERE genero = "feminino"';
+  const sql = 'SELECT id, nome, cpf, email, quantidade_consumo, valor_gasto FROM cliente WHERE genero = "feminino"';
 
   connection.query(sql, (error, results) => {
     if (error) {
@@ -113,11 +117,78 @@ app.get('/listarClientesFemininas', (req, res) => {
         nome: cliente.nome,
         cpf: cliente.cpf,
         email: cliente.email,
+        quantidade_consumo: cliente.quantidade_consumo,
+        valor_gasto: cliente.valor_gasto,
       }));
       res.json({ clientes });
     }
   });
 });
+
+app.get('/listarClientesMaiorConsumo', (req, res) => {
+  const sql = 'SELECT id, nome, cpf, email, quantidade_consumo, valor_gasto FROM cliente ORDER BY quantidade_consumo DESC LIMIT 10';
+
+  connection.query(sql, (error, results) => {
+    if (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Erro ao obter a lista de clientes que mais consumiram' });
+    } else {
+      const clientes = results.map((cliente) => ({
+        id: cliente.id,
+        nome: cliente.nome,
+        cpf: cliente.cpf,
+        email: cliente.email,
+        quantidade_consumo: cliente.quantidade_consumo,
+        valor_gasto: cliente.valor_gasto,
+      }));
+      res.json({ clientes });
+    }
+  });
+});
+
+app.get('/listarClientesMenorConsumo', (req, res) => {
+  const sql = 'SELECT id, nome, cpf, email, quantidade_consumo, valor_gasto FROM cliente ORDER BY quantidade_consumo ASC LIMIT 10';
+
+  connection.query(sql, (error, results) => {
+    if (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Erro ao obter a lista de clientes que menos consumiram' });
+    } else {
+      const clientes = results.map((cliente) => ({
+        id: cliente.id,
+        nome: cliente.nome,
+        cpf: cliente.cpf,
+        email: cliente.email,
+        quantidade_consumo: cliente.quantidade_consumo,
+        valor_gasto: cliente.valor_gasto,
+      }));
+      res.json({ clientes });
+    }
+  });
+});
+
+app.get('/listarClientesMaiorGasto', (req, res) => {
+  const sql = 'SELECT id, nome, cpf, email, quantidade_consumo, valor_gasto FROM cliente ORDER BY valor_gasto DESC LIMIT 5';
+
+  connection.query(sql, (error, results) => {
+    if (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Erro ao obter a lista de clientes que mais gastaram' });
+    } else {
+      const clientes = results.map((cliente) => ({
+        id: cliente.id,
+        nome: cliente.nome,
+        cpf: cliente.cpf,
+        email: cliente.email,
+        quantidade_consumo: cliente.quantidade_consumo,
+        valor_gasto: cliente.valor_gasto,
+      }));
+      res.json({ clientes });
+    }
+  });
+});
+
+
 
 
 
@@ -141,7 +212,7 @@ app.post('/cadastrarProduto', (req, res) => {
 });
 
 app.get('/listarProdutos', (req, res) => {
-  const sql = 'SELECT id, nome, valor, quantidade_vendas FROM produto';
+  const sql = 'SELECT id, nome, valor, quantidade_vendas, quantidade_vendas_masculino, quantidade_vendas_feminino FROM produto';
 
   connection.query(sql, (error, results) => {
     if (error) {
@@ -153,6 +224,71 @@ app.get('/listarProdutos', (req, res) => {
         nome: produto.nome,
         valor: produto.valor,
         quantidade_vendas: produto.quantidade_vendas,
+        quantidade_vendas_masculino: produto.quantidade_vendas_masculino,
+        quantidade_vendas_feminino: produto.quantidade_vendas_feminino,
+      }));
+      res.json({ produtos });
+    }
+  });
+});
+
+app.get('/listarProdutosMaisConsumidos', (req, res) => {
+  const sql = 'SELECT id, nome, valor, quantidade_vendas, quantidade_vendas_masculino, quantidade_vendas_feminino FROM produto ORDER BY quantidade_vendas DESC';
+
+  connection.query(sql, (error, results) => {
+    if (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Erro ao obter a lista de produtos mais consumidos' });
+    } else {
+      const produtos = results.map((produto) => ({
+        id: produto.id,
+        nome: produto.nome,
+        valor: produto.valor,
+        quantidade_vendas: produto.quantidade_vendas,
+        quantidade_vendas_masculino: produto.quantidade_vendas_masculino,
+        quantidade_vendas_feminino: produto.quantidade_vendas_feminino,
+      }));
+      res.json({ produtos });
+    }
+  });
+});
+
+app.get('/listarProdutosMaisConsumidosHomens', (req, res) => {
+  const sql = 'SELECT id, nome, valor, quantidade_vendas, quantidade_vendas_masculino, quantidade_vendas_feminino FROM produto ORDER BY quantidade_vendas_masculino DESC';
+
+  connection.query(sql, (error, results) => {
+    if (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Erro ao obter a lista de produtos mais consumidos por homens' });
+    } else {
+      const produtos = results.map((produto) => ({
+        id: produto.id,
+        nome: produto.nome,
+        valor: produto.valor,
+        quantidade_vendas: produto.quantidade_vendas,
+        quantidade_vendas_masculino: produto.quantidade_vendas_masculino,
+        quantidade_vendas_feminino: produto.quantidade_vendas_feminino,
+      }));
+      res.json({ produtos });
+    }
+  });
+});
+
+app.get('/listarProdutosMaisConsumidosMulheres', (req, res) => {
+  const sql = 'SELECT id, nome, valor, quantidade_vendas, quantidade_vendas_masculino, quantidade_vendas_feminino FROM produto ORDER BY quantidade_vendas_feminino DESC';
+
+  connection.query(sql, (error, results) => {
+    if (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Erro ao obter a lista de produtos mais consumidos por homens' });
+    } else {
+      const produtos = results.map((produto) => ({
+        id: produto.id,
+        nome: produto.nome,
+        valor: produto.valor,
+        quantidade_vendas: produto.quantidade_vendas,
+        quantidade_vendas_masculino: produto.quantidade_vendas_masculino,
+        quantidade_vendas_feminino: produto.quantidade_vendas_feminino,
       }));
       res.json({ produtos });
     }
@@ -197,7 +333,7 @@ app.post('/cadastrarServico', (req, res) => {
 });
 
 app.get('/listarServicos', (req, res) => {
-  const sql = 'SELECT id, nome, valor, quantidade_vendas FROM servico';
+  const sql = 'SELECT id, nome, valor, quantidade_vendas, quantidade_vendas_masculino, quantidade_vendas_feminino FROM servico';
 
   connection.query(sql, (error, results) => {
     if (error) {
@@ -209,6 +345,71 @@ app.get('/listarServicos', (req, res) => {
         nome: servico.nome,
         valor: servico.valor,
         quantidade_vendas: servico.quantidade_vendas,
+        quantidade_vendas_masculino: servico.quantidade_vendas_masculino,
+        quantidade_vendas_feminino: servico.quantidade_vendas_feminino,
+      }));
+      res.json({ servicos });
+    }
+  });
+});
+
+app.get('/listarServicosMaisConsumidos', (req, res) => {
+  const sql = 'SELECT id, nome, valor, quantidade_vendas, quantidade_vendas_masculino, quantidade_vendas_feminino FROM servico ORDER BY quantidade_vendas DESC';
+
+  connection.query(sql, (error, results) => {
+    if (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Erro ao obter a lista de serviços mais consumidos' });
+    } else {
+      const servicos = results.map((servico) => ({
+        id: servico.id,
+        nome: servico.nome,
+        valor: servico.valor,
+        quantidade_vendas: servico.quantidade_vendas,
+        quantidade_vendas_masculino: servico.quantidade_vendas_masculino,
+        quantidade_vendas_feminino: servico.quantidade_vendas_feminino,
+      }));
+      res.json({ servicos });
+    }
+  });
+});
+
+app.get('/listarServicosMaisConsumidosHomens', (req, res) => {
+  const sql = 'SELECT id, nome, valor, quantidade_vendas, quantidade_vendas_masculino, quantidade_vendas_feminino FROM servico ORDER BY quantidade_vendas_masculino DESC';
+
+  connection.query(sql, (error, results) => {
+    if (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Erro ao obter a lista de serviços mais consumidos por homens' });
+    } else {
+      const servicos = results.map((servico) => ({
+        id: servico.id,
+        nome: servico.nome,
+        valor: servico.valor,
+        quantidade_vendas: servico.quantidade_vendas,
+        quantidade_vendas_masculino: servico.quantidade_vendas_masculino,
+        quantidade_vendas_feminino: servico.quantidade_vendas_feminino,
+      }));
+      res.json({ servicos });
+    }
+  });
+});
+
+app.get('/listarServicosMaisConsumidosMulheres', (req, res) => {
+  const sql = 'SELECT id, nome, valor, quantidade_vendas, quantidade_vendas_masculino, quantidade_vendas_feminino FROM servico ORDER BY quantidade_vendas_feminino DESC';
+
+  connection.query(sql, (error, results) => {
+    if (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Erro ao obter a lista de servicos mais consumidos por homens' });
+    } else {
+      const servicos = results.map((servico) => ({
+        id: servico.id,
+        nome: servico.nome,
+        valor: servico.valor,
+        quantidade_vendas: servico.quantidade_vendas,
+        quantidade_vendas_masculino: servico.quantidade_vendas_masculino,
+        quantidade_vendas_feminino: servico.quantidade_vendas_feminino,
       }));
       res.json({ servicos });
     }

@@ -6,6 +6,8 @@ interface Produto {
     nome: string;
     valor: number;
     quantidade_vendas: number;
+    quantidade_vendas_masculino: number;
+    quantidade_vendas_feminino: number;
 }
 
 interface ListaProdutosProps {
@@ -14,7 +16,6 @@ interface ListaProdutosProps {
 
 export default function ListaProdutos(props: ListaProdutosProps) {
     const [produtos, setProdutos] = useState<Produto[]>([]);
-
 
     const fetchProdutos = async () => {
         try {
@@ -67,7 +68,7 @@ export default function ListaProdutos(props: ListaProdutosProps) {
             >
                 Listar os produtos mais consumidos
             </button>
-            
+
             <button
                 className="waves-effect waves-light btn cadastrar-botao botao-customizado"
                 onClick={(e) => props.seletorView("Listar produtos mais consumidos por homens", e)}
@@ -86,7 +87,9 @@ export default function ListaProdutos(props: ListaProdutosProps) {
                 <div key={index} className="collection-item">
                     Nome: {produto.nome} <br />
                     Valor: R$ {produto.valor} <br />
-                    Quantidade vendida: {produto.quantidade_vendas} 
+                    Quantidade vendida total: {produto.quantidade_vendas} <br />
+                    Quantidade comprada por homens: {produto.quantidade_vendas_masculino} <br />
+                    Quantidade comprada por mulheres: {produto.quantidade_vendas_feminino}
                     <div className="botoes">
                         <button
                             className="waves-effect waves-light editar"

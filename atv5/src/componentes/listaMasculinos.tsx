@@ -6,6 +6,8 @@ interface Cliente {
     nome: string;
     cpf: string;
     email: string;
+    quantidade_consumo: number;
+    valor_gasto: number;
 }
 
 interface ListaMasculinosProps {
@@ -55,13 +57,55 @@ export default function ListaMasculinos(props: ListaMasculinosProps) {
         <div className="collection">
             <h2> Lista de todos os clientes masculinos </h2>
 
+            <button
+                className="waves-effect waves-light btn cadastrar-botao botao-customizado"
+                onClick={(e) => props.seletorView("Cadastrar Cliente", e)}
+            >
+                Cadastrar um cliente
+            </button>
+
+            <button
+                className="waves-effect waves-light btn cadastrar-botao botao-customizado"
+                onClick={(e) => props.seletorView("Listar 10 clientes que mais consumiram", e)}
+            >
+                Listar 10 clientes que mais consumiram
+            </button>
+
+            <button
+                className="waves-effect waves-light btn cadastrar-botao botao-customizado"
+                onClick={(e) => props.seletorView("Listar 10 clientes que menos consumiram", e)}
+            >
+                Listar 10 clientes que menos consumiram
+            </button>
+
+            <button
+                className="waves-effect waves-light btn cadastrar-botao botao-customizado"
+                onClick={(e) => props.seletorView("Listar 5 clientes que mais gastaram", e)}
+            >
+                Listar 5 clientes que mais gastaram
+            </button>
+
+            <button
+                className="waves-effect waves-light btn cadastrar-botao botao-customizado"
+                onClick={(e) => props.seletorView("Listar clientes masculinos", e)}
+            >
+                Listar clientes masculinos
+            </button>
+            
+            <button
+                className="waves-effect waves-light btn cadastrar-botao botao-customizado"
+                onClick={(e) => props.seletorView("Listar clientes femininas", e)}
+            >
+                Listar clientes femininas
+            </button>
+            
             {clientes.map((cliente, index) => (
                 <div key={index} className="collection-item">
                     Nome: {cliente.nome} <br />
                     CPF: {cliente.cpf} <br />
                     Email: {cliente.email} <br />
-                    Produtos Consumidos: <br />
-                    Serviços Consumidos:
+                    Quantidade de Serviços e Produtos comprados: {cliente.quantidade_consumo} <br />
+                    Valor gasto: R$ {cliente.valor_gasto} 
                     <div className="botoes">
                         <button
                             className="waves-effect waves-light editar"

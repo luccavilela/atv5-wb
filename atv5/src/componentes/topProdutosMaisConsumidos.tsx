@@ -1,59 +1,107 @@
-import React from "react";
-import 'materialize-css/dist/css/materialize.min.css'
+import React, { useState, useEffect } from "react";
+import 'materialize-css/dist/css/materialize.min.css';
+
+interface Produto {
+    id: number;
+    nome: string;
+    valor: number;
+    quantidade_vendas: number;
+    quantidade_vendas_masculino: number;
+    quantidade_vendas_feminino: number;
+}
 
 interface TopProdutosMaisConsumidosProps {
     seletorView: (valor: string, e: React.MouseEvent<HTMLButtonElement>) => void;
-    }
+}
 
 export default function TopProdutosMaisConsumidos(props: TopProdutosMaisConsumidosProps) {
-        return (
-            <div className="collection">
-                <h2> Produtos mais comprados: </h2>
-                <div className="collection-item">
-                    Produto 1 <br/>
-                    Preço: <br/>
-                    Quantidade vendida: 
+    const [produtos, setProdutos] = useState<Produto[]>([]);
+
+
+    const fetchProdutos = async () => {
+        try {
+            const response = await fetch('http://localhost:3001/listarProdutosMaisConsumidos');
+            if (response.ok) {
+                const data = await response.json();
+                setProdutos(data.produtos);
+            } else {
+                console.error('Erro ao obter a lista de produtos mais consumidos');
+            }
+        } catch (error) {
+            console.error('Erro na requisição:', error);
+        }
+    };
+    
+    useEffect(() => {
+        fetchProdutos();
+    }, []);
+
+    const handleExcluir = async (id: number) => {
+        try {
+            const response = await fetch(`http://localhost:3001/excluirProduto/${id}`, {
+                method: 'DELETE',
+            });
+
+            if (response.ok) {
+                console.log('Produto excluído com sucesso');
+                fetchProdutos();
+            } else {
+                console.error('Erro ao excluir produto');
+            }
+        } catch (error) {
+            console.error('Erro na requisição:', error);
+        }
+    };
+
+    return (
+        <div className="collection">
+            <h2> Lista dos produtos mais consumidos </h2>
+            <button
+                className="waves-effect waves-light btn cadastrar-botao botao-customizado"
+                onClick={(e) => props.seletorView("Cadastrar Produto", e)}
+            >
+                Cadastrar um produto
+            </button>
+
+            <button
+                    className="waves-effect waves-light btn cadastrar-botao botao-customizado"
+                    onClick={(e) => props.seletorView("Listar produtos mais consumidos", e)}
+            >
+                Listar os produtos mais consumidos
+            </button>
+            
+            <button
+                className="waves-effect waves-light btn cadastrar-botao botao-customizado"
+                onClick={(e) => props.seletorView("Listar produtos mais consumidos por homens", e)}
+            >
+                Listar os produtos mais consumidos por homens
+            </button>
+
+            <button
+                className="waves-effect waves-light btn cadastrar-botao botao-customizado"
+                onClick={(e) => props.seletorView("Listar produtos mais consumidos por mulheres", e)}
+            >
+                Listar os produtos mais consumidos por mulheres
+            </button>
+
+            {produtos.map((produto, index) => (
+                <div key={index} className="collection-item">
+                    Nome: {produto.nome} <br />
+                    Valor: R$ {produto.valor} <br />
+                    Quantidade vendida total: {produto.quantidade_vendas} <br />
+                    Quantidade comprada por homens: {produto.quantidade_vendas_masculino} <br />
+                    Quantidade comprada por mulheres: {produto.quantidade_vendas_feminino} 
                     <div className="botoes">
-                        <button className="waves-effect waves-light editar" onClick={(e) => props.seletorView("Editar Produto", e)}>Editar</button>
-                        <button className="excluir">Excluir</button>
+                        <button
+                            className="waves-effect waves-light editar"
+                            onClick={(e) => props.seletorView("Editar Produto", e)}
+                        >
+                            Editar
+                        </button>
+                        <button className="excluir" onClick={() => handleExcluir(produto.id)}>Excluir</button>
                     </div>
                 </div>
-                <div className="collection-item">
-                    Produto 2 <br/>
-                    Preço: <br/>
-                    Quantidade vendida: 
-                    <div className="botoes">
-                        <button className="waves-effect waves-light editar" onClick={(e) => props.seletorView("Editar Produto", e)}>Editar</button>
-                        <button className="excluir">Excluir</button>
-                    </div>
-                </div>
-                <div className="collection-item">
-                    Produto 3 <br/>
-                    Preço: <br/>
-                    Quantidade vendida: 
-                    <div className="botoes">
-                        <button className="waves-effect waves-light editar" onClick={(e) => props.seletorView("Editar Produto", e)}>Editar</button>
-                        <button className="excluir">Excluir</button>
-                    </div>
-                </div>
-                <div className="collection-item">
-                    Produto 4 <br/>
-                    Preço: <br/>
-                    Quantidade vendida: 
-                    <div className="botoes">
-                        <button className="waves-effect waves-light editar" onClick={(e) => props.seletorView("Editar Produto", e)}>Editar</button>
-                        <button className="excluir">Excluir</button>
-                    </div>
-                </div>
-                <div className="collection-item">
-                    Produto 5 <br/>
-                    Preço: <br/>
-                    Quantidade vendida: 
-                    <div className="botoes">
-                        <button className="waves-effect waves-light editar" onClick={(e) => props.seletorView("Editar Produto", e)}>Editar</button>
-                        <button className="excluir">Excluir</button>
-                    </div>
-                </div>
-            </div>
-        )
-    }
+            ))}
+        </div>
+    );
+}
