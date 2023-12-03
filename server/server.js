@@ -630,7 +630,40 @@ app.put('/editarServico', (req, res) => {
 
 
 
+app.put('/editarCliente', (req, res) => {
+  const { nome, novoNome, novoNomeSocial, novoTelefone, novoEmail } = req.body;
 
+
+  connection.query('SELECT * FROM cliente WHERE nome = ?', [nome], (err, results) => {
+    if (err) {
+      console.error('Erro ao buscar o cliente:', err);
+      res.status(500).send('Erro interno do servidor');
+      return;
+    }
+
+    if (results.length === 0) {
+      res.status(404).send('Cliente não encontrado');
+      return;
+    }
+
+    const cliente = results[0];
+
+    connection.query(
+      'UPDATE cliente SET nome = ?, nome_social = ? telefone = ? email = ? WHERE id = ?',
+      [novoNome, novoNomeSocial, novoTelefone, novoEmail, cliente.id],
+      (err) => {
+        if (err) {
+          console.error('Erro ao atualizar o cliente:', err);
+          res.status(500).send('Erro interno do servidor');
+          return;
+        }
+
+        console.log('Cliente atualizado com sucesso');
+        res.status(200).send('Cliente atualizado com sucesso');
+      }
+    );
+  });
+});
 
 
 

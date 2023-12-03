@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import 'materialize-css/dist/css/materialize.min.css';
+import { setNomeProdutoEditar, setValorProdutoEditar } from './globals';
 
 interface Produto {
     id: number;
@@ -92,12 +93,16 @@ export default function TopProdutosMaisConsumidos(props: TopProdutosMaisConsumid
                     Quantidade comprada por homens: {produto.quantidade_vendas_masculino} <br />
                     Quantidade comprada por mulheres: {produto.quantidade_vendas_feminino} 
                     <div className="botoes">
-                        <button
-                            className="waves-effect waves-light editar"
-                            onClick={(e) => props.seletorView("Editar Produto", e)}
-                        >
-                            Editar
-                        </button>
+                    <button
+                        className="waves-effect waves-light editar"
+                        onClick={(e) => {
+                            setNomeProdutoEditar(produto.nome);
+                            setValorProdutoEditar(produto.valor);
+                            props.seletorView("Editar Produto", e);
+                        }}
+                    >
+                        Editar
+                    </button>
                         <button className="excluir" onClick={() => handleExcluir(produto.id)}>Excluir</button>
                     </div>
                 </div>
