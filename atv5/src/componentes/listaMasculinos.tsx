@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from "react";
 import 'materialize-css/dist/css/materialize.min.css';
+import { setNomeClienteEditar, setNomeSocialClienteEditar, setTelefoneClienteEditar, setEmailClienteEditar } from './globals';
 
 interface Cliente {
     id: number;
     nome: string;
+    nome_social: string;
+    telefone: string;
     cpf: string;
     email: string;
     quantidade_consumo: number;
@@ -102,14 +105,22 @@ export default function ListaMasculinos(props: ListaMasculinosProps) {
             {clientes.map((cliente, index) => (
                 <div key={index} className="collection-item">
                     Nome: {cliente.nome} <br />
+                    Nome Social: {cliente.nome_social} <br />
                     CPF: {cliente.cpf} <br />
+                    Telefone: {cliente.telefone} <br />
                     Email: {cliente.email} <br />
                     Quantidade de Serviços e Produtos comprados: {cliente.quantidade_consumo} <br />
                     Valor gasto: R$ {cliente.valor_gasto} 
                     <div className="botoes">
                         <button
                             className="waves-effect waves-light editar"
-                            onClick={(e) => props.seletorView("Editar Cliente", e)}
+                            onClick={(e) => { 
+                                setNomeClienteEditar(cliente.nome);
+                                setNomeSocialClienteEditar(cliente.nome_social);
+                                setTelefoneClienteEditar(cliente.telefone);
+                                setEmailClienteEditar(cliente.email);
+                                props.seletorView("Editar Cliente", e)
+                            }}
                         >
                             Editar
                         </button>

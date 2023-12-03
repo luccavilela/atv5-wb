@@ -8,7 +8,7 @@ Certifique-se de ter o [Node.js](https://nodejs.org/) instalado em seu sistema. 
 
 ### 2. Criar o banco de dados no MYSQL e executar o server
 
-No diretório `server/`, executar o código que está no arquivo bd.mysql no mysql ativo, e em seguida editar o arquivo "server.js" e mudar o username e senha para o seu caso.
+No diretório `server/`, executar o código que está no arquivo bd.sql no mysql ativo, e em seguida editar o arquivo "server.js" e mudar o username e senha para o seu caso.
 em seguida, executar no mesmo diretório:
 
 ```bash

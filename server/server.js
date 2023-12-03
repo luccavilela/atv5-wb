@@ -46,7 +46,7 @@ app.post('/cadastrarCliente', (req, res) => {
 });
 
 app.get('/listarClientes', (req, res) => {
-  const sql = 'SELECT id, nome, cpf, email, quantidade_consumo, valor_gasto FROM cliente';
+  const sql = 'SELECT id, nome, nome_social, telefone, cpf, email, quantidade_consumo, valor_gasto FROM cliente';
 
   connection.query(sql, (error, results) => {
     if (error) {
@@ -56,6 +56,8 @@ app.get('/listarClientes', (req, res) => {
       const clientes = results.map((cliente) => ({
         id: cliente.id,
         nome: cliente.nome,
+        nome_social: cliente.nome_social,
+        telefone: cliente.telefone,
         cpf: cliente.cpf,
         email: cliente.email,
         quantidade_consumo: cliente.quantidade_consumo,
@@ -84,7 +86,7 @@ app.delete('/excluirCliente/:id', (req, res) => {
 });
 
 app.get('/listarClientesMasculinos', (req, res) => {
-  const sql = 'SELECT id, nome, cpf, email, quantidade_consumo, valor_gasto FROM cliente WHERE genero = "masculino"';
+  const sql = 'SELECT id, nome, nome_social, telefone, cpf, email, quantidade_consumo, valor_gasto FROM cliente WHERE genero = "masculino"';
 
   connection.query(sql, (error, results) => {
     if (error) {
@@ -94,6 +96,8 @@ app.get('/listarClientesMasculinos', (req, res) => {
       const clientes = results.map((cliente) => ({
         id: cliente.id,
         nome: cliente.nome,
+        nome_social: cliente.nome_social,
+        telefone: cliente.telefone,
         cpf: cliente.cpf,
         email: cliente.email,
         quantidade_consumo: cliente.quantidade_consumo,
@@ -105,7 +109,7 @@ app.get('/listarClientesMasculinos', (req, res) => {
 });
 
 app.get('/listarClientesFemininas', (req, res) => {
-  const sql = 'SELECT id, nome, cpf, email, quantidade_consumo, valor_gasto FROM cliente WHERE genero = "feminino"';
+  const sql = 'SELECT id, nome, nome_social, telefone, cpf, email, quantidade_consumo, valor_gasto FROM cliente WHERE genero = "feminino"';
 
   connection.query(sql, (error, results) => {
     if (error) {
@@ -115,6 +119,8 @@ app.get('/listarClientesFemininas', (req, res) => {
       const clientes = results.map((cliente) => ({
         id: cliente.id,
         nome: cliente.nome,
+        nome_social: cliente.nome_social,
+        telefone: cliente.telefone,
         cpf: cliente.cpf,
         email: cliente.email,
         quantidade_consumo: cliente.quantidade_consumo,
@@ -126,7 +132,7 @@ app.get('/listarClientesFemininas', (req, res) => {
 });
 
 app.get('/listarClientesMaiorConsumo', (req, res) => {
-  const sql = 'SELECT id, nome, cpf, email, quantidade_consumo, valor_gasto FROM cliente ORDER BY quantidade_consumo DESC LIMIT 10';
+  const sql = 'SELECT id, nome, nome_social, telefone, cpf, email, quantidade_consumo, valor_gasto FROM cliente ORDER BY quantidade_consumo DESC LIMIT 10';
 
   connection.query(sql, (error, results) => {
     if (error) {
@@ -136,6 +142,8 @@ app.get('/listarClientesMaiorConsumo', (req, res) => {
       const clientes = results.map((cliente) => ({
         id: cliente.id,
         nome: cliente.nome,
+        nome_social: cliente.nome_social,
+        telefone: cliente.telefone,
         cpf: cliente.cpf,
         email: cliente.email,
         quantidade_consumo: cliente.quantidade_consumo,
@@ -147,7 +155,7 @@ app.get('/listarClientesMaiorConsumo', (req, res) => {
 });
 
 app.get('/listarClientesMenorConsumo', (req, res) => {
-  const sql = 'SELECT id, nome, cpf, email, quantidade_consumo, valor_gasto FROM cliente ORDER BY quantidade_consumo ASC LIMIT 10';
+  const sql = 'SELECT id, nome, nome_social, telefone, cpf, email, quantidade_consumo, valor_gasto FROM cliente ORDER BY quantidade_consumo ASC LIMIT 10';
 
   connection.query(sql, (error, results) => {
     if (error) {
@@ -157,6 +165,8 @@ app.get('/listarClientesMenorConsumo', (req, res) => {
       const clientes = results.map((cliente) => ({
         id: cliente.id,
         nome: cliente.nome,
+        nome_social: cliente.nome_social,
+        telefone: cliente.telefone,
         cpf: cliente.cpf,
         email: cliente.email,
         quantidade_consumo: cliente.quantidade_consumo,
@@ -168,7 +178,7 @@ app.get('/listarClientesMenorConsumo', (req, res) => {
 });
 
 app.get('/listarClientesMaiorGasto', (req, res) => {
-  const sql = 'SELECT id, nome, cpf, email, quantidade_consumo, valor_gasto FROM cliente ORDER BY valor_gasto DESC LIMIT 5';
+  const sql = 'SELECT id, nome, nome_social, telefone, cpf, email, quantidade_consumo, valor_gasto FROM cliente ORDER BY valor_gasto DESC LIMIT 5';
 
   connection.query(sql, (error, results) => {
     if (error) {
@@ -178,6 +188,8 @@ app.get('/listarClientesMaiorGasto', (req, res) => {
       const clientes = results.map((cliente) => ({
         id: cliente.id,
         nome: cliente.nome,
+        nome_social: cliente.nome_social,
+        telefone: cliente.telefone,
         cpf: cliente.cpf,
         email: cliente.email,
         quantidade_consumo: cliente.quantidade_consumo,
@@ -649,7 +661,7 @@ app.put('/editarCliente', (req, res) => {
     const cliente = results[0];
 
     connection.query(
-      'UPDATE cliente SET nome = ?, nome_social = ? telefone = ? email = ? WHERE id = ?',
+      'UPDATE cliente SET nome = ?, nome_social = ?, telefone = ?, email = ? WHERE id = ?',
       [novoNome, novoNomeSocial, novoTelefone, novoEmail, cliente.id],
       (err) => {
         if (err) {
