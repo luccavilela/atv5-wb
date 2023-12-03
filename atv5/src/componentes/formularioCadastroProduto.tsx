@@ -41,6 +41,8 @@ export default function FormularioCadastroProduto(props: FormularioCadastroProdu
         }
     };
 
+    const isSubmitDisabled = formData.valor <= 0 || formData.nome.trim() === '';
+
     return (
         <div className="row">
             <h2> Cadastro de Produto </h2>
@@ -74,6 +76,7 @@ export default function FormularioCadastroProduto(props: FormularioCadastroProdu
                             className="waves-effect waves-light btn cadastrar-botao botao-customizado"
                             type="submit"
                             name="action"
+                            disabled={isSubmitDisabled}
                         >
                             Cadastrar
                             <i className="material-icons right ">send</i>

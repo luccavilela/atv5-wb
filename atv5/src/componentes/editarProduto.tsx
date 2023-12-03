@@ -46,6 +46,10 @@ export default function EditarProduto(props: EditarProdutoProps) {
         props.seletorView("Produtos", e);
     };
 
+    const isUpdateDisabled =
+        nomeProduto.trim() === '' ||
+        valorProduto <= 0;
+
     return (
         <div className="row">
             <h2> Editar Produto </h2>
@@ -79,6 +83,7 @@ export default function EditarProduto(props: EditarProdutoProps) {
                             type="submit"
                             name="action"
                             onClick={handleAtualizarDados}
+                            disabled={isUpdateDisabled}
                         >
                             Atualizar dados
                             <i className="material-icons right">send</i>

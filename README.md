@@ -12,6 +12,7 @@ No diretório `server/`, executar o código que está no arquivo bd.sql no mysql
 em seguida, executar no mesmo diretório:
 
 ```bash
+npm install
 node server.js
 ```
 

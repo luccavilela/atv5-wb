@@ -46,6 +46,10 @@ export default function EditarServico(props: EditarServicoProps) {
         props.seletorView("Serviços", e);
     };
 
+    const isUpdateDisabled =
+        nomeServico.trim() === '' ||
+        valorServico <= 0;
+
     return (
         <div className="row">
             <h2> Editar Servico </h2>
@@ -79,6 +83,7 @@ export default function EditarServico(props: EditarServicoProps) {
                             type="submit"
                             name="action"
                             onClick={handleAtualizarDados}
+                            disabled={isUpdateDisabled}
                         >
                             Atualizar dados
                             <i className="material-icons right">send</i>

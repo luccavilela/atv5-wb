@@ -41,6 +41,8 @@ export default function FormularioCadastroServico(props: FormularioCadastroServi
         }
     };
 
+    const isSubmitDisabled = formData.valor <= 0 || formData.nome.trim() === '';
+
     return (
         <div className="row">
             <h2> Cadastro de Serviço </h2>
@@ -74,6 +76,7 @@ export default function FormularioCadastroServico(props: FormularioCadastroServi
                             className="waves-effect waves-light btn cadastrar-botao botao-customizado"
                             type="submit"
                             name="action"
+                            disabled={isSubmitDisabled}
                         >
                             Cadastrar
                             <i className="material-icons right ">send</i>

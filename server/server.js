@@ -70,7 +70,6 @@ app.get('/listarClientes', (req, res) => {
 
 app.delete('/excluirCliente/:id', (req, res) => {
   const id = req.params.id;
-  console.log(id)
   connection.query('DELETE FROM cliente WHERE id = ?', [id], (err, result) => {
     if (err) {
       console.error('Erro ao excluir cliente:', err);
@@ -310,7 +309,6 @@ app.get('/listarProdutosMaisConsumidosMulheres', (req, res) => {
 
 app.delete('/excluirProduto/:id', (req, res) => {
   const id = req.params.id;
-  console.log(id)
   connection.query('DELETE FROM produto WHERE id = ?', [id], (err, result) => {
     if (err) {
       console.error('Erro ao excluir produto:', err);
@@ -430,7 +428,6 @@ app.get('/listarServicosMaisConsumidosMulheres', (req, res) => {
 
 app.delete('/excluirServico/:id', (req, res) => {
   const id = req.params.id;
-  console.log(id)
   connection.query('DELETE FROM servico WHERE id = ?', [id], (err, result) => {
     if (err) {
       console.error('Erro ao excluir serviço:', err);
@@ -544,7 +541,7 @@ app.post('/realizarVendaServico', (req, res) => {
 });
 
 app.get('/listarVendas', (req, res) => {
-  const sql = 'SELECT id, nome_cliente, cpf_cliente, nome_servico_ou_produto, quantidade_venda, valor_venda, data_venda FROM historico_vendas';
+  const sql = 'SELECT id, nome_cliente, cpf_cliente, nome_servico_ou_produto, quantidade_venda, valor_venda, data_venda FROM historico_vendas ORDER BY data_venda DESC';
 
   connection.query(sql, (error, results) => {
     if (error) {

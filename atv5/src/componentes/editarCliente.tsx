@@ -50,6 +50,12 @@ export default function EditarCliente(props: EditarClienteProps) {
         props.seletorView("Clientes", e);
     };
 
+    const isUpdateDisabled =
+        nomeCliente.trim() === '' ||
+        nomeSocialCliente.trim() === '' ||
+        telefoneCliente.trim() === '' ||
+        emailCliente.trim() === '';
+
     return (
         <div className="row">
             <h2> Editar Cliente </h2>
@@ -105,6 +111,7 @@ export default function EditarCliente(props: EditarClienteProps) {
                             type="submit"
                             name="action"
                             onClick={handleAtualizarDados}
+                            disabled={isUpdateDisabled}
                         >
                             Atualizar dados
                             <i className="material-icons right">send</i>

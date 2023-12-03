@@ -63,6 +63,10 @@ export default function RealizarVendaServico(props: RealizarVendaServicoProps) {
       console.error('Erro na requisição:', error);
     }
   };
+  const isProdutoNotSelected = selectedServico === '';
+  const isCpfEmpty = cpfCliente.trim() === '';
+  const isVendaDisabled = isCpfEmpty || isProdutoNotSelected;
+
 
   return (
     <div className="row">
@@ -107,6 +111,7 @@ export default function RealizarVendaServico(props: RealizarVendaServicoProps) {
               type="submit"
               name="action"
               onClick={handleRealizarVenda}
+              disabled={isVendaDisabled}
             >
               Realizar Venda
               <i className="material-icons right">send</i>

@@ -48,6 +48,13 @@ export default function FormularioCadastroCliente(props: FormularioCadastroClien
         }
     };
 
+    const isSubmitDisabled =
+        formData.nome.trim() === '' ||
+        formData.nome_social.trim() === '' ||
+        formData.telefone.trim() === '' ||
+        formData.cpf.trim() === '' ||
+        formData.email.trim() === '';
+
     return (
         <div className="row">
             <h2> Cadastro de Cliente </h2>
@@ -143,6 +150,7 @@ export default function FormularioCadastroCliente(props: FormularioCadastroClien
                             className="waves-effect waves-light btn cadastrar-botao botao-customizado"
                             type="submit"
                             name="action"
+                            disabled={isSubmitDisabled}
                         >
                             Cadastrar
                             <i className="material-icons right ">send</i>

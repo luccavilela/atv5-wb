@@ -64,6 +64,11 @@ export default function RealizarVendaProduto(props: RealizarVendaProdutoProps) {
     }
   };
 
+  
+  const isProdutoNotSelected = selectedProduto === '';
+  const isCpfEmpty = cpfCliente.trim() === '';
+  const isVendaDisabled = quantidadeCompra <= 0 || isCpfEmpty || isProdutoNotSelected;
+
   return (
     <div className="row">
       <h2> Realizar Venda de Produto</h2>
@@ -119,6 +124,7 @@ export default function RealizarVendaProduto(props: RealizarVendaProdutoProps) {
               type="submit"
               name="action"
               onClick={handleRealizarVenda}
+              disabled={isVendaDisabled}
             >
               Realizar Venda
               <i className="material-icons right">send</i>
