@@ -555,6 +555,84 @@ app.get('/listarVendas', (req, res) => {
 
 
 
+app.put('/editarProduto', (req, res) => {
+  const { nome, novoNome, novoValor } = req.body;
+
+
+  connection.query('SELECT * FROM produto WHERE nome = ?', [nome], (err, results) => {
+    if (err) {
+      console.error('Erro ao buscar o produto:', err);
+      res.status(500).send('Erro interno do servidor');
+      return;
+    }
+
+    if (results.length === 0) {
+      res.status(404).send('Produto não encontrado');
+      return;
+    }
+
+    const produto = results[0];
+
+
+    connection.query(
+      'UPDATE produto SET nome = ?, valor = ? WHERE id = ?',
+      [novoNome, novoValor, produto.id],
+      (err) => {
+        if (err) {
+          console.error('Erro ao atualizar o produto:', err);
+          res.status(500).send('Erro interno do servidor');
+          return;
+        }
+
+        console.log('Produto atualizado com sucesso');
+        res.status(200).send('Produto atualizado com sucesso');
+      }
+    );
+  });
+});
+
+
+app.put('/editarServico', (req, res) => {
+  const { nome, novoNome, novoValor } = req.body;
+
+
+  connection.query('SELECT * FROM servico WHERE nome = ?', [nome], (err, results) => {
+    if (err) {
+      console.error('Erro ao buscar o serviço:', err);
+      res.status(500).send('Erro interno do servidor');
+      return;
+    }
+
+    if (results.length === 0) {
+      res.status(404).send('Serviço não encontrado');
+      return;
+    }
+
+    const servico = results[0];
+
+    connection.query(
+      'UPDATE servico SET nome = ?, valor = ? WHERE id = ?',
+      [novoNome, novoValor, servico.id],
+      (err) => {
+        if (err) {
+          console.error('Erro ao atualizar o serviço:', err);
+          res.status(500).send('Erro interno do servidor');
+          return;
+        }
+
+        console.log('Serviço atualizado com sucesso');
+        res.status(200).send('Serviço atualizado com sucesso');
+      }
+    );
+  });
+});
+
+
+
+
+
+
+
 
 
 

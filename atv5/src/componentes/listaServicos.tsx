@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import 'materialize-css/dist/css/materialize.min.css';
+import { setNomeServicoEditar, setValorServicoEditar } from './globals';
 
 interface Servico {
     id: number;
@@ -93,7 +94,11 @@ export default function ListaServicos(props: ListaServicosProps) {
                     <div className="botoes">
                         <button
                             className="waves-effect waves-light editar"
-                            onClick={(e) => props.seletorView("Editar Serviço", e)}
+                            onClick={(e) => {
+                                setNomeServicoEditar(servico.nome);
+                                setValorServicoEditar(servico.valor); 
+                                props.seletorView("Editar Serviço", e)
+                            }}
                         >
                             Editar
                         </button>
